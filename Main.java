@@ -89,11 +89,11 @@ public class Main {
 
         System.out.print("Name of customer: ");
         name = scanner.nextLine();
-        System.out.print("Contact No: ");
+        System.out.print("Contact No (xxx-xxxx-xxx): ");
         contact = scanner.nextLine();
-        System.out.print("Date of reservation: ");
+        System.out.print("Date of reservation (YYYY-MM-DD): ");
         date = scanner.nextLine();
-        System.out.print("Time of reservation: ");
+        System.out.print("Time of reservation (00:00 AM/PM): ");
         time = scanner.nextLine();
         System.out.print("Number of guests: ");
         number = scanner.nextLine();
