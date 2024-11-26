@@ -1,8 +1,12 @@
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -107,7 +111,99 @@ public class Main {
     }
 
     public static void updateCustomerRecord(Scanner scanner) {
+        System.out.println(" <-+ Update a Customer Record +->");
+        System.out.println("[1] Search by name");
+        System.out.println("[2] Search by contact");
+        System.out.println("[3] Search by date");
+        System.out.println("[4] Search by time");
+        System.out.println("[5] Search by number of guests");
+        System.out.print("Search by field: ");
+        int field = scanner.nextInt();
+        scanner.nextLine();
 
+        System.out.print("Enter search term: ");
+        String search = scanner.nextLine();
+
+        System.out.println();
+
+        switch (field) {
+            case 1:
+            updateByField(0, search, scanner);
+            break;
+            case 2:
+            updateByField(1, search, scanner);
+            break;
+            case 3:
+            updateByField(2, search, scanner);
+            break;
+            case 4:
+            updateByField(3, search, scanner);
+            break;
+            case 5:
+            updateByField(4, search, scanner);
+            break;
+        }
+
+
+    }
+
+    public static void updateByField(int fieldIndex, String search, Scanner scanner) {
+        ArrayList<String> records = new ArrayList<>();
+        boolean updated = false;
+
+        try {
+            // Read all lines from the file into the list
+            BufferedReader reader = new BufferedReader(new FileReader("Customer_Records.txt"));
+            String line;
+
+
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.split(",");
+                String current = fields[fieldIndex];
+                // System.out.println(line);
+
+                Pattern pattern = Pattern.compile(search, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(current);
+
+                // Check if the current line matches the ID to update
+                if (matcher.matches()) {
+                    // Update the record with the new information
+                    System.out.println("<-+ Update Record +->");
+                    System.out.print("Enter new name: ");
+                    String newName = scanner.nextLine();
+                    System.out.print("Enter new contact number: ");
+                    String newContact = scanner.nextLine();
+                    System.out.print("Enter new date of reservation: ");
+                    String newDate = scanner.nextLine();
+                    System.out.print("Enter new time of reservation: ");
+                    String newTime = scanner.nextLine();
+                    System.out.print("Enter new number of guests: ");
+                    String newGuests = scanner.nextLine();
+
+                    String updatedRecord = newName + "," + newContact + "," + newDate + "," + newTime + "," + newGuests;
+                    records.add(updatedRecord); // Add the updated record to the list
+                    updated = true;
+                } else {
+                    // Otherwise, add the original record to the list
+                    records.add(line);
+                }
+            }
+            reader.close();
+
+            // If the record was updated, write the new records back to the file
+            if (updated) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("Customer_Records.txt"));
+                for (String record : records) {
+                    writer.write(record);
+                    writer.newLine(); // Write each record on a new line
+                }
+                writer.close();
+            } else {
+                System.out.println("Record with the search term " + search + " not found.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void viewCustomerRecords(Scanner scanner) {
