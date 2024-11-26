@@ -111,7 +111,7 @@ public class Main {
     }
 
     public static void viewCustomerRecords(Scanner scanner) {
-        System.out.println(" <-+ View All Customer Records +->");
+        System.out.println(" <-+ View All Customer Records +->\n");
         try (BufferedReader br = new BufferedReader(new FileReader("Customer_Records.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -120,7 +120,7 @@ public class Main {
                 System.out.println("Phone Number: " + data[1]);
                 System.out.println("Date of Reservation: " + data[2]);
                 System.out.println("Time of Reservation: " + data[3]);
-                System.out.println("Number of Guests: " + data[4]);
+                System.out.println("Number of Guests: " + data[4] + "\n");
             } 
         } catch (IOException error) {
             System.out.println(error.getStackTrace());
