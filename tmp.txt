@@ -1,0 +1,167 @@
+    public static void reservationRecordMenu() {
+        while (true) {
+            System.out.println("\nReservation Record Module:");
+            System.out.println("[A] Create Orders Record");
+            System.out.println("[B] View Orders Record");
+            System.out.println("[X] Return to Main Menu");
+            System.out.print("Select an option: ");
+            String choice = scanner.nextLine().toUpperCase();
+
+            switch (choice) {
+                case "A":
+                    createOrdersRecord();
+                    break;
+                case "B":
+                    viewOrdersRecord();
+                    break;
+                case "X":
+                    System.out.println("Returning to Main Menu. . .");
+                    navigationMenu();
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    public static void createOrdersRecord() {
+        while (true) {
+            System.out.println("\nCreate Orders Record:");
+            System.out.println("[A] Meals Menu");
+            System.out.println("[B] Drink Menu");
+            System.out.println("[C] Dessert Menu");
+            System.out.println("[D] Side Dishes Menu");
+            System.out.println("[E] Bundled Menu");
+            System.out.println("[X] Return to Main Menu");
+            System.out.print("Select a menu: ");
+            String menuChoice = scanner.nextLine().toUpperCase();
+
+            switch (menuChoice) {
+                case "A":
+                    orderFromMenu("Meals", new String[][]{
+                            {"Signature-Chicken", "150.00"},
+                            {"Sinigang", "120.00"},
+                            {"Lechon", "250.00"},
+                            {"Angus Beef Steak", "300.00"},
+                            {"Grilled Bangus", "180.00"}
+                    });
+                    break;
+                case "B":
+                    orderFromMenu("Drinks", new String[][]{
+                            {"Water", "20.00"},
+                            {"Soda in Can", "30.00"},
+                            {"Buko Juice", "50.00"},
+                            {"Milk Tea", "60.00"},
+                            {"Black Coffee", "40.00"}
+                    });
+                    break;
+                case "C":
+                    orderFromMenu("Desserts", new String[][]{
+                            {"Ice Cream", "50.00"},
+                            {"Halo-Halo", "80.00"},
+                            {"Brownies", "40.00"},
+                            {"Egg Pie", "30.00"},
+                            {"Leche Flan", "45.00"}
+                    });
+                    break;
+                case "D":
+                    orderFromMenu("Side Dishes", new String[][]{
+                            {"Fried Bananas", "30.00"},
+                            {"Sweet Kamote Fries", "35.00"},
+                            {"Buko Salad", "40.00"},
+                            {"Onion Rings", "35.00"},
+                            {"Sopas", "50.00"}
+                    });
+                    break;
+                case "E":
+                    orderFromMenu("Bundled", new String[][]{
+                            {"Breakfast Combo", "150.00"},
+                            {"Grilled Combo", "250.00"},
+                            {"Family Pack", "500.00"},
+                            {"Party Pack", "800.00"},
+                            {"Kids Jamboree Meal", "100.00"}
+                    });
+                    break;
+                case "X":
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    public static void orderFromMenu(String menuName, String[][] items) {
+        System.out.println("\n" + menuName + " Menu:");
+        for (int i = 0; i < items.length; i++) {
+            System.out.printf("[%d] %s - %.2f\n", i + 1, items[i][0], Double.parseDouble(items[i][1]));
+        }
+        System.out.print("Select an item (1-" + items.length + ") or 0 to return: ");
+        int itemChoice = Integer.parseInt(scanner.nextLine());
+
+        if (itemChoice == 0) {
+            return;
+        } else if (itemChoice > 0 && itemChoice <= items.length) {
+            System.out.print("Enter quantity for " + items[itemChoice - 1][0] + ": ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            String order = items[itemChoice - 1][0] + " x" + quantity;
+            saveOrderToFile(order);
+            System.out.println("Added " + items[itemChoice - 1][0] + " x" + quantity + " to your orders.");
+        } else {
+            System.out.println("Invalid choice. Returning to menu.");
+        }
+    }
+
+    public static void saveOrderToFile(String order) {
+        try (FileWriter writer = new FileWriter(ORDERS_FILE, true)) {
+            writer.write(order + "\n");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the order.");
+        }
+    }
+
+    public static void viewOrdersRecord() {
+        System.out.println("\nOrders Record:");
+        try (BufferedReader reader = new BufferedReader(new FileReader(Customer_Orders.txt))) {
+            String line;
+            int lineNumber = 1;
+            boolean isEmpty = true;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(lineNumber++ + ". " + line);
+                isEmpty = false;
+            }
+            if (isEmpty) {
+                System.out.println("No orders have been made.");
+            }
+        } catch (IOException e) {
+            System.out.println("No orders record found.");
+        }
+    }
+    
+    public static void billOut() {
+        System.out.println("\nBilling Out:");
+        double totalAmount = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(ORDERS_FILE))) {
+            String line;
+            boolean isEmpty = true;
+
+            while ((line = reader.readLine()) != null) {
+                isEmpty = false;
+                String[] parts = line.split(" x");
+                String itemName = parts[0];
+                int quantity = Integer.parseInt(parts[1]);
+
+                double price = getPrice(itemName);
+                double itemTotal = price * quantity;
+                totalAmount += itemTotal;
+
+                System.out.printf("%s (x%d): ₱%.2f\n", itemName, quantity, itemTotal);
+            }
+            if (isEmpty) {
+                System.out.println("No orders to bill out.");
+            } else {
+                System.out.printf("\nTotal Amount: ₱%.2f\n", totalAmount);
+            }
+        } catch (IOException e) {
+            System.out.println("No orders record found.");
+        }
+    }
