@@ -18,26 +18,25 @@ public class Main {
             System.out.println("[1] Manage Customer Records");
             System.out.println("[2] Manage Reservation Records");
             System.out.println("[3] Bill Out");
-            System.out.println("[4] Exit");
+            System.out.println("[X] Exit");
             System.out.print("Please choose an option: ");
             
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String choice = scanner.nextLine().toUpperCase();
 
             // Prettify the UI, add extra line
             System.out.print("\n");
 
             switch (choice) {
-                case 1:
+                case "1":
                     customerRecordMenu(scanner);
                     break;
-                case 2:
+                case "2":
                     reservationRecordMenu(scanner);
                     break;
-                case 3:
+                case "3":
                     billOutMenu(scanner);
                     break;
-                case 4:
+                case "X":
                     System.out.println("Exiting the system...");
                     running = false;
                     break;
@@ -59,25 +58,24 @@ public class Main {
             System.out.println("[1] Create Customer Record");
             System.out.println("[2] Update Customer Record");
             System.out.println("[3] View Customer Record");
-            System.out.println("[4] Return to Main Menu");
+            System.out.println("[X] Return to Main Menu");
             System.out.print("Please choose an option: ");
             
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String choice = scanner.nextLine().toUpperCase();
 
             System.out.print("\n");
 
             switch (choice) {
-                case 1:
+                case "1":
                     createCustomerRecord(scanner);
                     break;
-                case 2:
+                case "2":
                     updateCustomerRecord(scanner);
                     break;
-                case 3:
+                case "3":
                     viewCustomerRecords(scanner);
                     break;
-                case 4:
+                case "X":
                     System.out.println("Returning to main menu...\n");
                     running = false;
                     break;
@@ -100,10 +98,14 @@ public class Main {
         System.out.print("Time of reservation (00:00 AM/PM): ");
         time = scanner.nextLine();
         System.out.print("Number of guests: ");
+
         number = scanner.nextLine();
+
+        System.out.print("\n");
         
-        try (FileWriter writer = new FileWriter("Customer_Records.txt", true)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Customer_Records.txt", true))) {
             writer.write(name+","+contact+","+date+","+time+","+number);
+            writer.newLine();
         } catch (IOException error) {
             System.out.println(error.getStackTrace());
         }
@@ -226,22 +228,24 @@ public class Main {
     public static void reservationRecordMenu(Scanner scanner) {
         String choice;
         do {
-            System.out.println("\nReservation Record Module:");
-            System.out.println("[A] Create Orders Record");
-            System.out.println("[B] View Orders Record");
+            System.out.println("<-+ Reservation Record Module +->");
+            System.out.println("[1] Create Orders Record");
+            System.out.println("[2] View Orders Record");
             System.out.println("[X] Return to Main Menu");
             System.out.print("Select an option: ");
             choice = scanner.nextLine().toUpperCase();
 
+            System.out.print("\n");
+
             switch (choice) {
-                case "A":
+                case "1":
                     createOrdersRecord(scanner);
                     break;
-                case "B":
+                case "2":
                     viewOrdersRecord();
                     break;
                 case "X":
-                    System.out.println("Returning to Main Menu. . .");
+                    System.out.println("Returning to Main Menu. . .\n");
                     navigationMenu(scanner);
                     break;
                 default:
@@ -252,18 +256,21 @@ public class Main {
 
     public static void createOrdersRecord(Scanner scanner) {
         while (true) {
-            System.out.println("\nCreate Orders Record:");
-            System.out.println("[A] Meals Menu");
-            System.out.println("[B] Drink Menu");
-            System.out.println("[C] Dessert Menu");
-            System.out.println("[D] Side Dishes Menu");
-            System.out.println("[E] Bundled Menu");
+            System.out.println("<-+ Create Orders Record +->");
+            System.out.println("[1] Meals Menu");
+            System.out.println("[2] Drink Menu");
+            System.out.println("[3] Dessert Menu");
+            System.out.println("[4] Side Dishes Menu");
+            System.out.println("[5] Bundled Menu");
             System.out.println("[X] Return to Main Menu");
             System.out.print("Select a menu: ");
+
             String menuChoice = scanner.nextLine().toUpperCase();
 
+            System.out.print("\n");
+
             switch (menuChoice) {
-                case "A":
+                case "1":
                     orderFromMenu("Meals", new String[][]{
                             {"Signature-Chicken", "150.00"},
                             {"Sinigang", "120.00"},
@@ -272,7 +279,7 @@ public class Main {
                             {"Grilled Bangus", "180.00"}
                     }, scanner);
                     break;
-                case "B":
+                case "2":
                     orderFromMenu("Drinks", new String[][]{
                             {"Water", "20.00"},
                             {"Soda in Can", "30.00"},
@@ -281,7 +288,7 @@ public class Main {
                             {"Black Coffee", "40.00"}
                     }, scanner);
                     break;
-                case "C":
+                case "3":
                     orderFromMenu("Desserts", new String[][]{
                             {"Ice Cream", "50.00"},
                             {"Halo-Halo", "80.00"},
@@ -290,7 +297,7 @@ public class Main {
                             {"Leche Flan", "45.00"}
                     }, scanner);
                     break;
-                case "D":
+                case "4":
                     orderFromMenu("Side Dishes", new String[][]{
                             {"Fried Bananas", "30.00"},
                             {"Sweet Kamote Fries", "35.00"},
@@ -299,7 +306,7 @@ public class Main {
                             {"Sopas", "50.00"}
                     }, scanner);
                     break;
-                case "E":
+                case "5":
                     orderFromMenu("Bundled", new String[][]{
                             {"Breakfast Combo", "150.00"},
                             {"Grilled Combo", "250.00"},
@@ -439,6 +446,7 @@ public class Main {
                 } 
 
                 System.out.printf("Recieved a change of ₱%.2f\n\n", change);
+                System.out.println("PAYMENT SUCCESSFUL");
             }
         } catch (IOException e) {
             System.out.println("No orders record found.");
