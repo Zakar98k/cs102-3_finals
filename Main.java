@@ -427,6 +427,18 @@ public class Main {
                 System.out.println("No orders to bill out.");
             } else {
                 System.out.printf("\nTotal Amount: ₱%.2f\n", totalAmount);
+
+                System.out.print("Payment amount: ₱");
+                Double payment = scanner.nextDouble();
+
+                Double change = payment - totalAmount;
+
+                if (change < 0.0) {
+                    System.out.printf("Insufficient payment, you are short by ₱%.2f\n", Math.abs(change));
+                    return;
+                } 
+
+                System.out.printf("Recieved a change of ₱%.2f\n\n", change);
             }
         } catch (IOException e) {
             System.out.println("No orders record found.");
