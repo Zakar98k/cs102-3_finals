@@ -144,6 +144,9 @@ public class Main {
             case 5:
             updateByField(4, search, scanner);
             break;
+            default:
+            System.out.println("Exiting, invalid option");
+            return;
         }
 
 
@@ -246,8 +249,7 @@ public class Main {
                     break;
                 case "X":
                     System.out.println("Returning to Main Menu. . .\n");
-                    navigationMenu(scanner);
-                    break;
+                    return;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -338,9 +340,9 @@ public class Main {
             int quantity = Integer.parseInt(scanner.nextLine());
             String order = items[itemChoice - 1][0] + " x" + quantity;
             saveOrderToFile(order);
-            System.out.println("Added " + items[itemChoice - 1][0] + " x" + quantity + " to your orders.");
+            System.out.println("Added " + items[itemChoice - 1][0] + " x" + quantity + " to your orders.\n");
         } else {
-            System.out.println("Invalid choice. Returning to menu.");
+            System.out.println("Invalid choice. Returning to menu.\n");
         }
     }
 
@@ -353,7 +355,7 @@ public class Main {
     }
 
     public static void viewOrdersRecord() {
-        System.out.println("\nOrders Record:");
+        System.out.println("Orders Record:");
         try (BufferedReader reader = new BufferedReader(new FileReader("Customer_Orders.txt"))) {
             String line;
             int lineNumber = 1;
@@ -368,6 +370,7 @@ public class Main {
         } catch (IOException e) {
             System.out.println("No orders record found.");
         }
+        System.out.println();
     }
     
     public static double getPrice(String itemName) {
@@ -437,6 +440,7 @@ public class Main {
 
                 System.out.print("Payment amount: ₱");
                 Double payment = scanner.nextDouble();
+                scanner.nextLine();
 
                 Double change = payment - totalAmount;
 
@@ -446,10 +450,10 @@ public class Main {
                 } 
 
                 System.out.printf("Recieved a change of ₱%.2f\n\n", change);
-                System.out.println("PAYMENT SUCCESSFUL");
+                System.out.println("PAYMENT SUCCESSFUL\n");
             }
         } catch (IOException e) {
-            System.out.println("No orders record found.");
+            System.out.println("No orders record found.\n");
         }
     }
 
