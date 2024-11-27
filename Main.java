@@ -103,9 +103,9 @@ public class Main {
 
         System.out.print("\n");
         
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Customer_Records.txt", true))) {
+        try (FileWriter writer = new FileWriter("Customer_Records.txt", true)) {
             writer.write(name+","+contact+","+date+","+time+","+number);
-            writer.newLine();
+            writer.write("\n");
         } catch (IOException error) {
             System.out.println(error.getStackTrace());
         }
@@ -412,7 +412,7 @@ public class Main {
     }
 
     public static void billOutMenu(Scanner scanner) {
-        System.out.println("\nBilling Out:");
+        System.out.println("<-+ Billing Out +->");
         double totalAmount = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader("Customer_Orders.txt"))) {
             String line;
