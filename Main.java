@@ -363,6 +363,46 @@ public class Main {
         }
     }
     
+    public static double getPrice(String itemName) {
+        String[][] allItems = new String[][]{
+            {"Signature-Chicken", "150.00"},
+            {"Sinigang", "120.00"},
+            {"Lechon", "250.00"},
+            {"Angus Beef Steak", "300.00"},
+            {"Grilled Bangus", "180.00"},
+            {"Water", "20.00"},
+            {"Soda in Can", "30.00"},
+            {"Buko Juice", "50.00"},
+            {"Milk Tea", "60.00"},
+            {"Black Coffee", "40.00"},
+            {"Ice Cream", "50.00"},
+            {"Halo-Halo", "80.00"},
+            {"Brownies", "40.00"},
+            {"Egg Pie", "30.00"},
+            {"Leche Flan", "45.00"},
+            {"Fried Bananas", "30.00"},
+            {"Sweet Kamote Fries", "35.00"},
+            {"Buko Salad", "40.00"},
+            {"Onion Rings", "35.00"},
+            {"Sopas", "50.00"},
+            {"Breakfast Combo", "150.00"},
+            {"Grilled Combo", "250.00"},
+            {"Family Pack", "500.00"},
+            {"Party Pack", "800.00"},
+            {"Kids Jamboree Meal", "100.00"}
+        };
+
+        for (String[] currentItem : allItems) {
+            Pattern pattern = Pattern.compile(itemName, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(currentItem[0]);
+
+            if (matcher.matches()) {
+                return Double.parseDouble(currentItem[1]);
+            }
+        }
+
+        return 0.0;
+    }
 
     public static void billOutMenu(Scanner scanner) {
         System.out.println("\nBilling Out:");
